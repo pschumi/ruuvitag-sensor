@@ -77,9 +77,9 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
             _LOGGER.error("Skipping %s", dev_name)
             continue
         else:
-            devices.append(RuuvitagTemp(name, mac))
-            devices.append(RuuvitagHumidity(name, mac))
-            devices.append(RuuvitagPressure(name, mac))
+            devices.append(RuuvitagTemp(name + "_temperature", mac))
+            devices.append(RuuvitagHumidity(name + "_humidity", mac))
+            devices.append(RuuvitagPressure(name + "_pressure", mac))
 
     if devices:
         mon = Monitor(hass, devices)
