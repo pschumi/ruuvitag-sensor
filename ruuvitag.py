@@ -53,6 +53,9 @@ _LOGGER = logging.getLogger(__name__)
 CONF_BEACONS = 'beacons'
 CONF_MAC = 'mac'
 
+ATTR_DEVICE = 'device'
+ATTR_MODEL = 'model'
+
 BEACON_SCHEMA = vol.Schema({
     vol.Required(CONF_MAC): cv.string,
     vol.Optional(CONF_NAME): cv.string
@@ -106,19 +109,38 @@ def get_from_conf(config, config_key, length):
     return string
 
 
-class RuuvitagTemp(Entity):
-    """Representation of a temperature sensor."""
-
+class RuuvitagEntity(Entity):
     def __init__(self, name, mac):
         """Initialize a sensor."""
         self._name = name
         self.mac = mac
-        self.data = { 'temperature' : STATE_UNKNOWN }
 
     @property
     def name(self):
         """Return the name of the sensor."""
         return self._name
+
+
+    @property
+    def should_poll(self):
+        """Return the polling state."""
+        return False
+
+    @property
+    def device_state_attributes(self):
+        """Return the state attributes of the sensor."""
+        return {
+            ATTR_DEVICE: "RuuviTag",
+            ATTR_MODEL: 1,
+        }
+
+class RuuvitagTemp(RuuvitagEntity):
+    """Representation of a temperature sensor."""
+
+    def __init__(self, name, mac):
+        """Initialize a sensor."""
+        super(RuuvitagTemp, self).__init__(name, mac)
+        self.data = { 'temperature' : STATE_UNKNOWN }
 
     @property
     def state(self):
@@ -130,24 +152,13 @@ class RuuvitagTemp(Entity):
         """Return the unit the value is expressed in."""
         return TEMP_CELSIUS
 
-    @property
-    def should_poll(self):
-        """Return the polling state."""
-        return False
-
-class RuuvitagHumidity(Entity):
+class RuuvitagHumidity(RuuvitagEntity):
     """Representation of a humidity sensor."""
 
     def __init__(self, name, mac):
         """Initialize a sensor."""
-        self._name = name
-        self.mac = mac
+        super(RuuvitagHumidity, self).__init__(name, mac)
         self.data = { 'humidity' : STATE_UNKNOWN }
-
-    @property
-    def name(self):
-        """Return the name of the sensor."""
-        return self._name
 
     @property
     def state(self):
@@ -159,24 +170,13 @@ class RuuvitagHumidity(Entity):
         """Return the unit the value is expressed in."""
         return "%"
 
-    @property
-    def should_poll(self):
-        """Return the polling state."""
-        return False
-
-class RuuvitagPressure(Entity):
+class RuuvitagPressure(RuuvitagEntity):
     """Representation of a atmospheric pressure sensor."""
 
     def __init__(self, name, mac):
         """Initialize a sensor."""
-        self._name = name
-        self.mac = mac
+        super(RuuvitagPressure, self).__init__(name, mac)
         self.data = { 'pressure' : STATE_UNKNOWN }
-
-    @property
-    def name(self):
-        """Return the name of the sensor."""
-        return self._name
 
     @property
     def state(self):
@@ -187,11 +187,6 @@ class RuuvitagPressure(Entity):
     def unit_of_measurement(self):
         """Return the unit the value is expressed in."""
         return "hPa"
-
-    @property
-    def should_poll(self):
-        """Return the polling state."""
-        return False
 
 class Monitor(threading.Thread):
     """Continuously scan for BLE advertisements."""
