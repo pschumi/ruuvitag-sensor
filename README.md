@@ -8,6 +8,21 @@ Copy ruuvitag.py to your .homeassistant/custom_components/sensor/ -directory.
 
 Ensure that hcidump and hcitool are installed on the host machine.
 
+For Home Assistant running in a virtual environment you have to install the ruuvitag package inside the virtual environment:
+
+1. Change user to homeassistant and activate virtual environment and install ruuvitag-sensor:
+```
+$ sudo -u homeassistant -H -s
+$ source /srv/homeassistant/bin/activate
+$ pip3 install ruuvitag-sensor
+$ exit
+```
+
+2. Add permissions to homeassistant user with "sudo visudo":
+```
+homeassistant   ALL = (ALL) NOPASSWD: /bin/hciconfig, /usr/bin/hcitool, /usr/bin/hciattach, /usr/bin/hcidump, /usr/bin/hcitool, /bin/kill
+```
+
 
 ## Configuration:
 configuration.yml
