@@ -12,13 +12,14 @@ sensor:
 Installation
 ------------
 
-Copy ruuvitag.py to <homeassistanconf>/custom_components/sensor/
+Copy sensor.py to <homeassistanconf>/custom_components/ruuvitag/
 Uses ruuvitag_sensor plugin as dependency so works perfectly only on Linux and expects 
 that hcidump and hcitool are installed.
 
 Version
 -------
 1.0     25.06.2018     First release.
+1.1     05.05.2019     Updated structure for new integration
 
 Created by
 ----------

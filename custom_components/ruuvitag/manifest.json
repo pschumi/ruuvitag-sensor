@@ -1,0 +1,8 @@
+{
+    "domain": "ruuvitag",
+    "name": "Ruuvitag",
+    "documentation": "https://github.com/pschumi/ruuvitag-sensor",
+    "dependencies": [],
+    "codeowners": [],
+    "requirements": ['ruuvitag_sensor==0.11.0', 'construct==2.9.41']
+  }
